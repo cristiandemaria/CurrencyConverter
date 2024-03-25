@@ -1,0 +1,63 @@
+<style>
+    body{
+    background: url('public/img/bg_clean.jpg') fixed;
+    background-repeat: no-repeat;
+    background-size: cover;
+    filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='public/img/bg_clean.jpg',     sizingMethod='scale');
+    -ms-filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='public/img/bg_clean', sizingMethod='scale');
+}
+@media (max-width: 480px){
+    body{
+    }
+}
+
+
+</style>
+
+<div align="" class="container">
+    <h1 style="font-weight: bold; color: #d6d9d9">Currency Converter</h1>
+        <br /><br /><br/>
+
+    <div class="row center">
+        <div class="col-md-3">
+            <select style="height: 50px"class="custom-select" name="tipodoacao" id="cotacao1" >
+                <option value="">Geral</option>
+                {{#each moedas.xml}}
+                    <option value="{{@key}}">{{_text}}</option>
+                {{/each}}
+            </select>
+        </div>  
+        <div class="col-md-3">
+            <select style="height: 50px"class="custom-select" name="tipodoacao" id="cotacao2" >
+                <option value="">Geral</option>
+                {{#each moedas.xml}}
+                    <option value="{{@key}}">{{_text}}</option>
+                {{/each}}
+            </select>
+        </div>
+        <div class="col"><button class="try"  style="color: inherit;" onclick="redirecionar()">CONVERTER</button></div>
+        <script>
+            function redirecionar(){
+                var cot1 = document.getElementById("cotacao1");
+                var cot2 = document.getElementById("cotacao2");
+                var value1 = cot1.value;
+                var value2 = cot2.value;
+                document.location.href = "/currency"+value1+"&"+value2;
+            }
+        </script>
+    </div>
+    <br>
+    <div class="jumbotron" style="width: 66%;">
+        {{#each dados}}
+            <h1 style="color: #4c4e4b;">Cotação</h1>
+            <p style="white-space: pre-line; color: #4c4e4b">Moeda: {{name}}
+            Cotação: {{bid}}
+            Variação: {{varBid}}
+            Dia: {{create_date}}</p> 
+            <br>
+        {{/each}}
+     </div>
+
+        
+</div>
+

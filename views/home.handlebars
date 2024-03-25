@@ -1,15 +1,18 @@
-<div>
-    <h1>
-        Bolsa de Valores
-        <br /><br /><br/>
+<style>
+    body{
+    background: url('public/img/bg.png') fixed;
+    background-repeat: no-repeat;
+    background-size: cover;
+    }
+@media (max-width: 480px){
+    body{
+        background: url('public/img/bg_mobile.png') no-repeat;
+        background-size: cover;
+    }
+}
 
-        <input type="search" name="Search" id="">
-        {{#each dados}}
-            <p>Moeda: {{name}}</p> <br>
-            <p>Cotação: {{bid}}</p> <br>
-            <P>Variação: {{varBid}}</P>
-            <p>Dia: {{create_date}}</p> <br>
-            <p></p> <br>
-        {{/each}}
-    </h1>
+
+</style>
+<div id="botao">
+    <a class="try" href="/home" style="color: inherit;">TRY NOW</a>
 </div>

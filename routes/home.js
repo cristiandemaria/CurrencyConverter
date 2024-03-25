@@ -1,40 +1,56 @@
 const express = require('express')
 const router = express.Router()
 const request = require('request')
-const moedas = 'USD-BRL,EUR-BRL,BTC-BRL'
-var dado = 1
-
-//CONSTANTE COM OS PARAMETROS DA API
-const options = {
-    url: `https://economia.awesomeapi.com.br/json/last/${moedas}`,
-    method: 'GET',
-    header: {
-        'Accept': 'application/json',
-        'Accept-Charset': 'utf-8'
-    }
-}
-//CHAMADA CALLBACK DA API
-const chamandoCotacoes = (erro, res, body) => {
-    
-    if(erro){
-        
-    }
-    
-    var json = JSON.parse(body)
-    dado = json
-    console.log(dado)
-}
-
-//REQUEST COM 
+const convert = require('xml-js')
 
 
 //ROTA CENTRAL
-router.get('/', (req, res) => {
-    request(options, chamandoCotacoes)
-    console.log(dado)
-
-    res.render('home', {dados: dado})
+router.get('/home', (req, res) => {
     
+    var xml = require('fs').readFileSync('public/files/moedas.xml', 'utf8');
+    var result = convert.xml2json(xml, {compact: true, spaces: 4});
+    var json = JSON.parse(result)
+    //console.log(json)
+
+    res.render('admin/pages/home', {moedas: json})
+    
+})
+
+//ROTA CURRENCY
+router.get('/currency:id1&:id2', (req, res) => {
+    var xml = require('fs').readFileSync('public/files/moedas.xml', 'utf8');
+    var result = convert.xml2json(xml, {compact: true, spaces: 4});
+    var json = JSON.parse(result)
+    const moedas = req.params.id1+"-"+req.params.id2
+    console.log(moedas)
+    //CONSTANTE COM OS PARAMETROS DA API
+    const options = {
+        url: `https://economia.awesomeapi.com.br/json/last/${moedas}`,
+        method: 'GET',
+        header: {
+            'Accept': 'application/json',
+            'Accept-Charset': 'utf-8'
+        }
+    }
+    //CHAMADA CALLBACK DA API
+    const chamandoCotacoes = (erro, res, body) => {
+        
+        if(erro){
+            console.error
+        }
+        
+        var json = JSON.parse(body)
+        dado = json
+        console.log(dado)
+    }
+
+    request(options, chamandoCotacoes)
+
+    setTimeout(()=>{
+        console.log(dado)
+        res.render('admin/pages/home', {dados: dado, moedas: json})
+    }, 5000)
+   
 })
 
 module.exports = router

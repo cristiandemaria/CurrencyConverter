@@ -1,11 +1,12 @@
-const express = require('express');
-const handlebars = require('express-handlebars');
-const { urlencoded, json } = require('body-parser');
-const bodyParser = require('body-parser');
-const app = express();
-const home = require('./routes/home');
+const express = require('express')
+const handlebars = require('express-handlebars')
+const { urlencoded, json } = require('body-parser')
+const bodyParser = require('body-parser')
+const app = express()
+const home = require('./routes/home')
+const landingPage = require('./routes/landing')
 
-app.use(bodyParser.urlencoded({extended: false}));
+app.use(bodyParser.urlencoded({extended: false}))
 app.use(bodyParser.json());
 
 const hbs = handlebars.create({
@@ -15,21 +16,22 @@ const hbs = handlebars.create({
         allowProtoMethodsByDefault: true,
     }
 })
-app.engine('handlebars', hbs.engine);
-app.set('view engine', 'handlebars');
+app.engine('handlebars', hbs.engine)
+app.set('view engine', 'handlebars')
 
 //CARREGANDO ARQUIVOS ESTÁTICOS
-app.use('/public/css', express.static('public/css'));
-app.use('/public/js', express.static('public/js'));
-app.use('/public/img', express.static('public/img'));
+app.use('/public/css', express.static('public/css'))
+app.use('/public/js', express.static('public/js'))
+app.use('/public/img', express.static('public/img'))
+app.use('/public/assets', express.static('public/assets'))
 
 
-
-app.use('/', home);
-
+//CARREGANDO ROTAS
+app.use('/', landingPage)
+app.use('/', home)
 
 
 const PORT = process.env.PORT || 5050;
 app.listen(PORT, ()=>{
     console.log("Servidor aberto!!!!!")
-});
+})
