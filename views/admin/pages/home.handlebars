@@ -47,16 +47,42 @@
         </script>
     </div>
     <br>
-    <div class="jumbotron" style="width: 66%;">
-        {{#each dados}}
-            <h1 style="color: #4c4e4b;">Cotação</h1>
-            <p style="white-space: pre-line; color: #4c4e4b">Moeda: {{name}}
-            Cotação: {{bid}}
-            Variação: {{varBid}}
-            Dia: {{create_date}}</p> 
-            <br>
-        {{/each}}
-     </div>
+    <div class="row center">
+        <div class="col">
+            <div class="jumbotron" style="width: 100%;">
+                {{#if dados.status}}
+                    <h1 style="color: #4c4e4b">Cotação indisponível</h1>
+                {{else}}
+                    {{#each dados}}
+                        <h1 style="color: #4c4e4b;">Cotação</h1>
+                        <p style="white-space: pre-line; color: #4c4e4b">Moeda: {{name}}
+                        Cotação: {{bid}}
+                        Variação: {{varBid}}
+                        Dia: {{create_date}}</p> 
+                        <br>
+                    {{/each}}
+                {{/if}}
+            </div>
+        </div>
+        <div class="col">
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+            <script src="https://cdn.jsdelivr.net/npm/handlebars@latest/dist/handlebars.js"></script>
+            <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js"></script>
+
+
+            <script id="lineChart" type="text/x-handlebars-template">
+
+            <div class="row">
+            <div class="col-sm-12 col-md-2"> </div>
+                <div class="col-sm-12 col-md-8"> 
+                <canvas id="myChart" width="400" height="400"></canvas>
+            </div>
+            </div>
+            </div>
+
+            </script>
+        </div>
+    </div>
 
         
 </div>

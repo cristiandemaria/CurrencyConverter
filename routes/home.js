@@ -41,7 +41,13 @@ router.get('/currency:id1&:id2', (req, res) => {
         
         var json = JSON.parse(body)
         dado = json
-        console.log(dado)
+        
+        if (dado == undefined){
+            dado = 0
+        }
+
+        
+        console.log(dado.status)
     }
 
     request(options, chamandoCotacoes)
@@ -49,7 +55,7 @@ router.get('/currency:id1&:id2', (req, res) => {
     setTimeout(()=>{
         console.log(dado)
         res.render('admin/pages/home', {dados: dado, moedas: json})
-    }, 5000)
+    }, 3000)
    
 })
 
