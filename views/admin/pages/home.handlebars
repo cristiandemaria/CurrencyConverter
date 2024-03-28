@@ -18,37 +18,38 @@
     <h1 style="font-weight: bold; color: #d6d9d9">Currency Converter</h1>
         <br /><br /><br/>
 
-    <div class="row center">
-        <div class="col-md-3">
-            <select style="height: 50px"class="custom-select" name="tipodoacao" id="cotacao1" >
-                <option value="">Geral</option>
-                {{#each moedas.xml}}
-                    <option value="{{@key}}">{{_text}}</option>
-                {{/each}}
-            </select>
+    <div class="row center ">
+        <div class="col-md-4 g-2">
+            <div>
+                <select style="height: 50px"class="custom-select col-md-12 col-md-offset-2" id="cotacao1" >
+                    <option value="{{k1}}">{{m1}}</option>
+                    {{#each moedas.xml}}
+                        <option value="{{@key}}">{{_text}}</option>
+                    {{/each}}
+                </select>
+            </div>
+            <div>
+                <input class="form-control col-md-12 col-md-offset-2" type="number" id="inputBox">
+            </div>
         </div>  
-        <div class="col-md-3">
-            <select style="height: 50px"class="custom-select" name="tipodoacao" id="cotacao2" >
-                <option value="">Geral</option>
-                {{#each moedas.xml}}
-                    <option value="{{@key}}">{{_text}}</option>
-                {{/each}}
-            </select>
+        <div class="col-md-4 g-2">
+            <div>
+                <select style="height: 50px"class="custom-select col-md-12 col-md-offset-2" id="cotacao2" >
+                    <option value="{{k2}}">{{m2}}</option>
+                    {{#each moedas.xml}}
+                        <option value="{{@key}}">{{_text}}</option>
+                    {{/each}}
+                </select>
+            </div>
+            <div>
+                <input class="form-control col-md-12 col-md-offset-2" type="text" id="inputBox2" readonly>
+            </div>
         </div>
-        <div class="col"><button class="try"  style="color: inherit;" onclick="redirecionar()">CONVERTER</button></div>
-        <script>
-            function redirecionar(){
-                var cot1 = document.getElementById("cotacao1");
-                var cot2 = document.getElementById("cotacao2");
-                var value1 = cot1.value;
-                var value2 = cot2.value;
-                document.location.href = "/currency"+value1+"&"+value2;
-            }
-        </script>
+        <div class="col-md-4 g-4"><button class="try"  style="color: inherit;" onclick="redirecionar()">CONVERTER</button></div>
     </div>
     <br>
     <div class="row center">
-        <div class="col">
+        <div class="col g-2">
             <div class="jumbotron" style="width: 100%;">
                 {{#if dados.status}}
                     <h1 style="color: #4c4e4b">Cotação indisponível</h1>
@@ -60,11 +61,12 @@
                         Variação: {{varBid}}
                         Dia: {{create_date}}</p> 
                         <br>
+                        <input type="text" id="mult" hidden value="{{bid}}">
                     {{/each}}
                 {{/if}}
             </div>
         </div>
-        <!---
+        <!--- GRAFICOOOOOOOO
         <div class="col">
             <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
             <script src="https://cdn.jsdelivr.net/npm/handlebars@latest/dist/handlebars.js"></script>
@@ -85,7 +87,44 @@
         </div>
         -->
     </div>
+    <div class="row center">
+        <div class="col g-2">
+            <div class="jumbotron" style="width: 100%;">
+                {{#if dados.status}}
+                    <h1 style="color: #4c4e4b">Histórico indisponível</h1>
+                {{else}}
+                    {{#each dados}}
+                        <h1 style="color: #4c4e4b;">Cotação</h1>
+                        <p style="white-space: pre-line; color: #4c4e4b">Moeda: {{name}}
+                        Cotação: {{bid}}
+                        Variação: {{varBid}}
+                        Dia: {{create_date}}</p> 
+                        <br>
+                        <input type="text" id="mult" hidden value="{{bid}}">
+                    {{/each}}
+                {{/if}}
+            </div>
+        </div>
+    </div>
 
         
 </div>
+<script>
+    var mult = document.getElementById("mult")
+    let inputBox = document.querySelector("#inputBox")
+        inputBox.addEventListener("input", function(){
+        document.getElementById("inputBox2").value = this.value * mult.value
+    })
+    function redirecionar(){
+        var cot1 = document.getElementById("cotacao1");
+        var cot2 = document.getElementById("cotacao2");
+        var m1 = cot1.options[cot1.selectedIndex].text;
+        var m2 = cot2.options[cot2.selectedIndex].text;
+        var value1 = cot1.value;
+        var value2 = cot2.value;
+        document.location.href = "/currency"+value1+"&"+value2+"&"+m1+"&"+m2;
+    }
+
+
+</script>
 
