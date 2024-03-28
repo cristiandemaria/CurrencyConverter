@@ -17,11 +17,15 @@ router.get('/home', (req, res) => {
 })
 
 //ROTA CURRENCY
-router.get('/currency:id1&:id2', (req, res) => {
+router.get('/currency:id1&:id2&:m1&:m2', (req, res) => {
     var xml = require('fs').readFileSync('public/files/moedas.xml', 'utf8');
     var result = convert.xml2json(xml, {compact: true, spaces: 4});
     var json = JSON.parse(result)
-    const moedas = req.params.id1+"-"+req.params.id2
+    var m1 = req.params.m1 
+    var m2 = req.params.m2
+    var k1 = req.params.id1
+    var k2 = req.params.id2
+    const moedas = k1+"-"+k2
     console.log(moedas)
     //CONSTANTE COM OS PARAMETROS DA API
     const options = {
@@ -54,7 +58,15 @@ router.get('/currency:id1&:id2', (req, res) => {
 
     setTimeout(()=>{
         console.log(dado)
-        res.render('admin/pages/home', {dados: dado, moedas: json})
+        res.render('admin/pages/home', {
+            dados: dado, 
+            moedas: json,
+            encodedJson : encodeURIComponent(JSON.stringify(dado)),
+            m1: m1,
+            m2: m2,
+            k1: k1,
+            k2: k2
+        })
     }, 3000)
    
 })
