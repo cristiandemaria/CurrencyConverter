@@ -29,7 +29,12 @@
             <div>
                 <input class="form-control col-md-12 col-md-offset-2" type="number" id="inputBox" placeholder="Digite um valor a ser convertido">
             </div>
-        </div>  
+        </div>
+        <div class="col-sm-1 ">
+            <a class="div-svg" onclick="reverser()" style="cursor: pointer;">
+                <img class="svg" src="public/img/reverter.svg">
+            </a>
+        </div>
         <div class="col-md-4 g-2">
             <div>
                 <select style="height: 50px" class="custom-select col-md-12 col-md-offset-2" id="cotacao2">
@@ -43,7 +48,7 @@
                 <input class="form-control col-md-12 col-md-offset-2" type="text" id="inputBox2" readonly>
             </div>
         </div>
-        <div class="col-md-4 g-4"><button class="try"  style="color: inherit;" onclick="redirecionar()">CONVERTER</button></div>
+        <div class="col-md-3 g-4"><button class="try"  style="color: inherit; font-weight: bold" onclick="redirecionar()">CONVERT</button></div>
     </div>
     <br>
     <div class="row center">
@@ -66,39 +71,27 @@
         </div>
 
         <div class="col">
-            <div class="row card-box bg-white">
-                <div class="col-sm-12 col-md-8">
-                    <div id="chart">
-                    </div>
-                </div>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+            <script src="https://cdn.jsdelivr.net/npm/handlebars@latest/dist/handlebars.js"></script>
+            <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js"></script>
+
+
+            <script id="lineChart" type="text/x-handlebars-template">
+
+            <div class="row">
+            <div class="col-sm-12 col-md-2"> </div>
+                <div class="col-sm-12 col-md-8"> 
+                <canvas id="myChart" width="400" height="400"></canvas>
             </div>
-        </div>
+            </div>
+            </div>
 
             </script>
         </div>
-        -->
     </div>
-    <div class="row center">
-        <div class="col g-2">
-            <div class="jumbotron" style="width: 100%;">
-                {{#if dados.status}}
-                    <h1 style="color: #4c4e4b">Histórico indisponível</h1>
-                {{else}}
-                    {{#each dados}}
-                        <h1 style="color: #4c4e4b;">Cotação</h1>
-                        <p style="white-space: pre-line; color: #4c4e4b">Moeda: {{name}}
-                        Cotação: {{bid}}
-                        Variação: {{varBid}}
-                        Dia: {{create_date}}</p> 
-                        <br>
-                        <input type="text" id="mult" hidden value="{{bid}}">
-                    {{/each}}
-                {{/if}}
-            </div>
-        </div>
-    </div>
-
         
+</div>
+
 </div>
 <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 <script>
@@ -115,8 +108,144 @@
         var m2 = cot2.options[cot2.selectedIndex].text;
         var value1 = cot1.value;
         var value2 = cot2.value;
-        document.location.href = "/currency"+value1+"&"+value2+"&"+m1+"&"+m2;
+        asda()
+        document.location.href = "/currency" + value1 + "&" + value2 + "&" + m1 + "&" + m2;
+
+
+    }
+    function reverser(){
+        var cot1 = document.getElementById("cotacao1");
+        var cot2 = document.getElementById("cotacao2");
+        var m1 = cot1.options[cot1.selectedIndex].text;
+        var m2 = cot2.options[cot2.selectedIndex].text;
+        var value1 = cot1.value;
+        var value2 = cot2.value;
+        document.location.href = "/currency"+value2+"&"+value1+"&"+m2+"&"+m1;
     }
 
+
+    function asda() {
+        var datafinal = []
+        var low = []
+        var high = []
+        $.ajax({
+            url: `https://economia.awesomeapi.com.br/json/daily/BRL-USD/15`,
+            method: 'GET',
+            header: { 'Accept': 'application/json', 'Accept-Charset': 'utf-8' },
+            success: function (result) {
+
+                var historico = result
+
+
+
+                $.each(historico, function (k, v) {
+                    //for(var i = 1; i < historico.length; i++){}
+
+                    //Pega variação mais baixa do dia
+                    var hbaixo = historico[k].low
+                    hbaixo = parseFloat(hbaixo)
+                    low.push(hbaixo)
+
+                    //Pega variação mais alta do dia
+                    var halto = historico[k].high
+                    halto = parseFloat(halto)
+                    high.push(halto)
+
+                    //Pega data do dia
+                    var dateTS = historico[k].timestamp
+                    var dateTSint = parseInt(dateTS) * 1000
+                    var dataC = new Date(dateTSint)
+                    var dateBR = dataC.toLocaleDateString("pt-BR")
+                    datafinal.push(dateBR)
+                });
+            }
+        });
+
+
+        var options = {
+            series: [
+                {
+                    name: "High - 2013",
+                    data: high
+                },
+                {
+                    name: "Low - 2013",
+                    data: low
+                }
+            ],
+            chart: {
+                height: 350,
+                type: 'line',
+                dropShadow: {
+                    enabled: true,
+                    color: '#000',
+                    top: 18,
+                    left: 7,
+                    blur: 10,
+                    opacity: 0.2
+                },
+                toolbar: {
+                    show: false
+                }
+            },
+            colors: ['#4287f5', '#4287f5'],
+            dataLabels: {
+                enabled: true,
+            },
+            stroke: {
+                curve: 'smooth'
+            },
+            title: {
+                text: 'Average High & Low Temperature',
+                align: 'left'
+            },
+            grid: {
+                borderColor: '#26162e',
+                row: {
+                    colors: ['#b588b8', '#576956'], // takes an array which will be repeated on columns
+                    opacity: 0.5
+                },
+            },
+            markers: {
+                size: 1
+            },
+            xaxis: {
+                categories: datafinal,
+                title: {
+                    text: 'Month'
+                }
+            },
+            yaxis: {
+                title: {
+                    text: 'Temperature'
+                },
+                min: 0,
+                max: 0.8
+            },
+            legend: {
+                position: 'top',
+                horizontalAlign: 'right',
+                floating: true,
+                offsetY: -25,
+                offsetX: -5
+            },
+            tooltip: {
+                custom: ({ dataPointIndex, w }) => {
+                    let s = w.config.series[0].data[dataPointIndex];
+                    return `<div class="apexcharts-tooltip-rangebar"><div>
+              <span class="category">${s.x}: </span>
+              <span class="value start-value">${s.y[0]}</span>
+              <span class="separator">-</span>
+              <span class="value end-value">${s.y[1]}</span></div></div>`;
+                }
+            },
+        };
+
+        var chart = new ApexCharts(document.querySelector("#chart"), options);
+        chart.render();
+
+    }
+
+    // https://economia.awesomeapi.com.br/json/last/:moedas
 
 </script>
