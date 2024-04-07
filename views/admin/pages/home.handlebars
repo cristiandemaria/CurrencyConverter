@@ -74,29 +74,26 @@
             <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
             <script src="https://cdn.jsdelivr.net/npm/handlebars@latest/dist/handlebars.js"></script>
             <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js"></script>
-
-
             <script id="lineChart" type="text/x-handlebars-template">
 
             <div class="row">
-            <div class="col-sm-12 col-md-2"> </div>
-                <div class="col-sm-12 col-md-8"> 
-                <canvas id="myChart" width="400" height="400"></canvas>
-            </div>
-            </div>
+                <div class="col-sm-12 col-md-2"> </div>
+                    <div class="col-sm-12 col-md-8"> 
+                        <canvas id="myChart" width="400" height="400"></canvas>
+                    </div>
+                </div>
             </div>
 
             </script>
         </div>
-    </div>
-        
+    </div>  
 </div>
-
 </div>
 <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 <script>
     var mult = document.getElementById("mult")
     let inputBox = document.querySelector("#inputBox")
+    document.getElementById("inputBox").value = 1
     inputBox.addEventListener("input", function () {
         document.getElementById("inputBox2").value = this.value * mult.value
     })
