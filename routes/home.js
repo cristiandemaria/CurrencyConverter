@@ -57,7 +57,6 @@ router.get('/currency:id1&:id2&:m1&:m2', (req, res) => {
     request(options, chamandoCotacoes)
 
     setTimeout(()=>{
-        console.log(dado)
         res.render('admin/pages/home', {
             dados: dado, 
             moedas: json,
@@ -67,7 +66,7 @@ router.get('/currency:id1&:id2&:m1&:m2', (req, res) => {
             k1: k1,
             k2: k2
         })
-    }, 3000)
+    }, 1500)
    
 })
 
