@@ -6,7 +6,7 @@ const app = express()
 const home = require('./routes/home')
 const landingPage = require('./routes/landing')
 
-app.use(bodyParser.urlencoded({extended: false}))
+app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json());
 
 const hbs = handlebars.create({
@@ -32,6 +32,6 @@ app.use('/', home)
 
 
 const PORT = process.env.PORT || 5050;
-app.listen(PORT, ()=>{
+app.listen(PORT, () => {
     console.log("Servidor aberto!!!!!")
 })
