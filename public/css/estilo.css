@@ -74,6 +74,9 @@ outline: 0;
         height: 8%;
         
     }
+    .grafico{
+        height: 100%;
+    }
 }
 
 @media (min-width: 768px) {
@@ -91,4 +94,8 @@ outline: 0;
     position: absolute;
     top: 80%;
     left: 50%;
+}
+
+.grafico{
+    height: 30rem;
 }

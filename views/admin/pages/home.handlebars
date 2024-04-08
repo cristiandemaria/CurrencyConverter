@@ -12,12 +12,12 @@
     }
 </style>
 
-<div align="" class="container">
+<div class="container">
     <h1 style="font-weight: bold; color: #d6d9d9">Currency Converter</h1>
     <br /><br /><br />
 
-    <div class="row center ">
-        <div class="col-md-4 g-2">
+    <div class="row center">
+        <div class="col-md-4 ">
             <div>
                 <select style="height: 50px" class="custom-select col-md-12 col-md-offset-2" id="cotacao1">
                     <option value="{{k1}}">{{m1}}</option>
@@ -36,7 +36,7 @@
                 <img class="svg" src="public/img/reverter.svg">
             </a>
         </div>
-        <div class="col-md-4 g-2">
+        <div class="col-md-4">
             <div>
                 <select style="height: 50px" class="custom-select col-md-12 col-md-offset-2" id="cotacao2">
                     <option value="{{k2}}">{{m2}}</option>
@@ -53,15 +53,15 @@
                 onclick="redirecionar()">CONVERT</button></div>
     </div>
     <br>
-    <div class="row center">
-        <div class="col g-2">
-            <div class="jumbotron" style="width: 100%;">
+    <div class="center ">
+        <div class="">
+            <div class="">
                 {{#if dados.status}}
-                <h1 style="color: #4c4e4b">Cotação indisponível</h1>
+                <h1 style="color: #d6d9d9">Cotação indisponível</h1>
                 {{else}}
                 {{#each dados}}
-                <h1 style="color: #4c4e4b;">Cotação</h1>
-                <p style="white-space: pre-line; color: #4c4e4b">Moeda: {{name}}
+                <h1 style="color: #d6d9d9;">Cotação</h1>
+                <p style="white-space: pre-line; color: #d6d9d9">Moeda: {{name}}
                     Cotação: {{bid}}
                     Variação: {{varBid}}
                     Dia: {{create_date}}</p>
@@ -72,10 +72,10 @@
             </div>
         </div>
 
-        <div class="col">
-            <div class="row card-box bg-white">
-                <div class="col-sm-12 col-md-8">
-                    <div id="chart">
+        <div class="">
+            <div class="">
+                <div class="grafico">
+                    <div class=""  id="chart">
                     </div>
                 </div>
             </div>
@@ -86,13 +86,13 @@
 
 </div>
 
-
 </div>
 <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 <script src="/public/assets/js/jquery.js" type="text/javascript"></script>
 <script>
     var mult = document.getElementById("mult")
     let inputBox = document.querySelector("#inputBox")
+    document.getElementById("inputBox").value = 1
     inputBox.addEventListener("input", function () {
         document.getElementById("inputBox2").value = this.value * mult.value
     })
@@ -166,88 +166,95 @@
                     var dateBR = dataC.toLocaleDateString("pt-BR")
                     datafinal.push(dateBR)
                 });
-
+                
                 var options = {
+                    states:{
+                        hover: {
+                            filter: {
+                                type: 'lighten',
+                                value: 0.15,
+                            }
+                        },
+                        active: {
+                            allowMultipleDataPointsSelection: false,
+                            filter: {
+                                type: 'darken',
+                                value: 0.35,
+                            }
+                        }
+                    },
                     series: [
                         {
-                            name: "High - 2013",
-                            data: high
+                            name: "Alta",
+                            data: high,
                         },
                         {
-                            name: "Low - 2013",
-                            data: low
+                            name: "Baixa",
+                            data: low,
+                            enabled: false
                         }
                     ],
+                    colors: ['#F44336', '#E91E63', '#9C27B0'],
                     chart: {
-                        height: 350,
-                        type: 'line',
-                        dropShadow: {
+                        foreColor: '#d6d9d9',
+                        type: 'area',
+                        stacked: false,
+                        height: '100%',
+                        zoom: {
+                            type: 'x',
                             enabled: true,
-                            color: '#000',
-                            top: 18,
-                            left: 7,
-                            blur: 10,
-                            opacity: 0.2
+                            autoScaleYaxis: true
                         },
                         toolbar: {
-                            show: false
+                            autoSelected: 'zoom'
                         }
                     },
-                    colors: ['#4287f5', '#4287f5'],
-                    dataLabels: {
-                        enabled: true,
-                    },
-                    stroke: {
-                        curve: 'smooth'
-                    },
-                    title: {
-                        text: 'Average High & Low Temperature',
-                        align: 'left'
-                    },
-                    grid: {
-                        borderColor: '#26162e',
-                        row: {
-                            colors: ['#b588b8', '#576956'], // takes an array which will be repeated on columns
-                            opacity: 0.5
+                    dataLabels:{
+                        style:{
+                            
                         },
+                        enabled: true
                     },
                     markers: {
-                        size: 1
+                        size: 0
                     },
-                    xaxis: {
-                        categories: datafinal,
-                        title: {
-                            text: 'Month'
+                    title: {
+                        text: 'Histórico dos últimos 15 dias',
+                        align: 'left'
+                    },
+                    fill: {
+                        type: 'gradient',
+                        gradient: {
+                            shadeIntensity: 1,
+                            inverseColors: false,
+                            opacityFrom: 0.5,
+                            opacityTo: 0,
+                            stops: [0, 90, 100]
                         }
                     },
                     yaxis: {
                         title: {
-                            text: 'Temperature'
-                        },
-                        min: 0,
-                        max: 0.8
+                            text: 'preço'
+                        }
                     },
-                    legend: {
-                        position: 'top',
-                        horizontalAlign: 'right',
-                        floating: true,
-                        offsetY: -25,
-                        offsetX: -5
+                    xaxis: {
+                        categories: datafinal,
+                        type: 'date'
                     },
                     tooltip: {
                         custom: ({ dataPointIndex, w }) => {
                             let s = w.config.series[0].data[dataPointIndex];
                             return `<div class="apexcharts-tooltip-rangebar"><div>
-              <span class="category">${s.x}: </span>
-              <span class="value start-value">${s.y[0]}</span>
-              <span class="separator">-</span>
-              <span class="value end-value">${s.y[1]}</span></div></div>`;
+                            <span class="category">${s.x}: </span>
+                            <span class="value start-value">${s.y[0]}</span>
+                            <span class="separator">-</span>
+                            <span class="value end-value">${s.y[1]}</span></div></div>`;
                         }
                     },
                 };
 
                 var chart = new ApexCharts(document.querySelector("#chart"), options);
-                chart.render();
+                chart.render(); 
             }
         });
     }

@@ -2,7 +2,7 @@ const express = require('express')
 const router = express.Router()
 const request = require('request')
 const convert = require('xml-js')
-const dfs = require('jquery')
+//const dfs = require('jquery')
 
 //ROTA CENTRAL
 router.get('/home', (req, res) => {
