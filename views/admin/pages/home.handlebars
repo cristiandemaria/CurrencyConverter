@@ -1,10 +1,11 @@
 <style>
     body {
-        background: url('public/img/bg_clean.jpg') fixed;
+        background: url('public/img/bg_clean2.0.png') fixed;
         background-repeat: no-repeat;
         background-size: cover;
-        filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='public/img/bg_clean.jpg', sizingMethod='scale');
-        -ms-filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='public/img/bg_clean', sizingMethod='scale');
+        filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='public/img/bg_clean2.0.png', sizingMethod='scale');
+        -ms-filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='public/img/bg_clean2.0', sizingMethod='scale');
+        /*background: linear-gradient(to top right, black, gray) fixed;*/
     }
 
     @media (max-width: 480px) {
@@ -31,7 +32,7 @@
                     placeholder="Digite um valor a ser convertido">
             </div>
         </div>
-        <div class="col-sm-1 ">
+        <div class="col-sm-1">
             <a class="div-svg" onclick="reverser()" style="cursor: pointer;">
                 <img class="svg" src="public/img/reverter.svg">
             </a>
@@ -53,14 +54,15 @@
                 onclick="redirecionar()">CONVERT</button></div>
     </div>
     <br>
-    <div class="center ">
-        <div class="">
+    <div class="center row">
+        <div class="row">
             <div class="">
                 {{#if dados.status}}
                 <h1 style="color: #d6d9d9">Cotação indisponível</h1>
                 {{else}}
                 {{#each dados}}
                 <h1 style="color: #d6d9d9;">Cotação</h1>
+            </div>
                 <p style="white-space: pre-line; color: #d6d9d9">Moeda: {{name}}
                     Cotação: {{bid}}
                     Variação: {{varBid}}
@@ -69,13 +71,15 @@
                 <input type="text" id="mult" hidden value="{{bid}}">
                 {{/each}}
                 {{/if}}
-            </div>
+            
         </div>
 
         <div class="">
             <div class="">
                 <div class="grafico">
                     <div class=""  id="chart">
+                    </div>
+                    <div id="chart2">
                     </div>
                 </div>
             </div>
@@ -137,7 +141,7 @@
         var value2 = cot2.value;
 
         $.ajax({
-            url: "https://economia.awesomeapi.com.br/json/daily/" + value1 + "-" + value2 + "/15",
+            url: "https://economia.awesomeapi.com.br/json/daily/" + value1 + "-" + value2 + "/30",
             method: 'GET',
             header: { 'Accept': 'application/json', 'Accept-Charset': 'utf-8' },
             success: function (result) {
@@ -163,26 +167,11 @@
                     var dateTS = historico[k].timestamp
                     var dateTSint = parseInt(dateTS) * 1000
                     var dataC = new Date(dateTSint)
-                    var dateBR = dataC.toLocaleDateString("pt-BR")
+                    var dateBR = dataC.toLocaleDateString("en-US")
                     datafinal.push(dateBR)
                 });
                 
                 var options = {
-                    states:{
-                        hover: {
-                            filter: {
-                                type: 'lighten',
-                                value: 0.15,
-                            }
-                        },
-                        active: {
-                            allowMultipleDataPointsSelection: false,
-                            filter: {
-                                type: 'darken',
-                                value: 0.35,
-                            }
-                        }
-                    },
                     series: [
                         {
                             name: "Alta",
@@ -191,7 +180,6 @@
                         {
                             name: "Baixa",
                             data: low,
-                            enabled: false
                         }
                     ],
                     colors: ['#F44336', '#E91E63', '#9C27B0'],
@@ -210,17 +198,23 @@
                         }
                     },
                     dataLabels:{
-                        style:{
-                            
-                        },
-                        enabled: true
+                        enabled: false
                     },
                     markers: {
-                        size: 0
+                        size: 1,
+                        strokeColors: ['#A6295F', '#254AA0'],
+                        hover: {
+                            size: 10,
+                        }
                     },
                     title: {
                         text: 'Histórico dos últimos 15 dias',
-                        align: 'left'
+                        align: 'left',
+                        style: {
+                            fontSize: '20px',
+                            fontWeight: 'bold',
+                            fontFamily: 'sans-serif'
+                        }
                     },
                     fill: {
                         type: 'gradient',
@@ -228,7 +222,7 @@
                             shadeIntensity: 1,
                             inverseColors: false,
                             opacityFrom: 0.5,
-                            opacityTo: 0,
+                            opacityTo: 0.1,
                             stops: [0, 90, 100]
                         }
                     },
@@ -239,22 +233,16 @@
                     },
                     xaxis: {
                         categories: datafinal,
-                        type: 'date'
+                        type: 'datetime'
                     },
                     tooltip: {
-                        custom: ({ dataPointIndex, w }) => {
-                            let s = w.config.series[0].data[dataPointIndex];
-                            return `<div class="apexcharts-tooltip-rangebar"><div>
-                            <span class="category">${s.x}: </span>
-                            <span class="value start-value">${s.y[0]}</span>
-                            <span class="separator">-</span>
-                            <span class="value end-value">${s.y[1]}</span></div></div>`;
-                        }
+                        enabled: true
                     },
                 };
 
                 var chart = new ApexCharts(document.querySelector("#chart"), options);
-                chart.render(); 
+                chart.render();
+      
             }
         });
     }
