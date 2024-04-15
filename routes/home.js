@@ -15,13 +15,6 @@ router.get('/home', (req, res) => {
     res.render('admin/pages/home', { moedas: json })
 })
 var moedas;
-var low
-var high
-var datafinal
-
-
-
-
 
 //ROTA CURRENCY
 router.get('/currency:id1&:id2&:m1&:m2', (req, res) => {
@@ -44,7 +37,7 @@ router.get('/currency:id1&:id2&:m1&:m2', (req, res) => {
             'Accept-Charset': 'utf-8'
         }
     }
-
+    
     //CHAMADA CALLBACK DA API
     const chamandoCotacoes = (erro, res, body) => {
         if (erro) {
@@ -62,6 +55,7 @@ router.get('/currency:id1&:id2&:m1&:m2', (req, res) => {
     request(options, chamandoCotacoes)
 
     setTimeout(() => {
+        console.log(dado)
         res.render('admin/pages/home', {
             dados: dado,
             moedas: json,

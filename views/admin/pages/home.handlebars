@@ -14,32 +14,31 @@
 </style>
 
 <div class="container">
-    <h1 style="font-weight: bold; color: #d6d9d9">Currency Converter</h1>
+    <h1 style="font-size: 4.5rem;font-weight: bold; color: #d6d9d9">Currency Converter</h1>
     <br /><br /><br />
 
     <div class="row center">
         <div class="col-md-4 ">
             <div>
-                <select style="height: 50px" class="custom-select col-md-12 col-md-offset-2" id="cotacao1">
-                    <option value="{{k1}}">{{m1}}</option>
+                <select style="height: 50px" class="custom-select col-md-12 col-md-offset-2 select" id="cotacao1">
+                    <option style="background-color: rgba(76, 78, 75, .3);" value="{{k1}}">{{m1}}</option>
                     {{#each moedas.xml}}
                     <option value="{{@key}}">{{_text}}</option>
                     {{/each}}
                 </select>
             </div>
             <div>
-                <input class="form-control col-md-12 col-md-offset-2" type="number" id="inputBox"
-                    placeholder="Digite um valor a ser convertido">
+                <input style="background-color: rgba(76, 78, 75, .3); color: #fff;" class="form-control col-md-12 col-md-offset-2" type="number" id="inputBox" placeholder="Digite um valor a ser convertido">
             </div>
         </div>
-        <div class="col-sm-1">
+        <div class="col">
             <a class="div-svg" onclick="reverser()" style="cursor: pointer;">
-                <img class="svg" src="public/img/reverter.svg">
+                <img class="svg" src="public/img/reverter2.svg">
             </a>
         </div>
         <div class="col-md-4">
             <div>
-                <select style="height: 50px" class="custom-select col-md-12 col-md-offset-2" id="cotacao2">
+                <select style="height: 50px" class="custom-select col-md-12 col-md-offset-2 select" id="cotacao2">
                     <option value="{{k2}}">{{m2}}</option>
                     {{#each moedas.xml}}
                     <option value="{{@key}}">{{_text}}</option>
@@ -47,31 +46,32 @@
                 </select>
             </div>
             <div>
-                <input class="form-control col-md-12 col-md-offset-2" type="text" id="inputBox2" readonly>
+                <input style="background-color: rgba(76, 78, 75, .3);color: #fff;" class="form-control col-md-12 col-md-offset-2 inputNumber" type="text" id="inputBox2" readonly>
             </div>
         </div>
         <div class="col-md-3 g-4"><button class="try" style="color: inherit; font-weight: bold"
                 onclick="redirecionar()">CONVERT</button></div>
     </div>
     <br>
-    <div class="center row">
-        <div class="row">
-            <div class="">
+    <div class="center">
+        <div id="cot" class="row">
+            <div class="col-4">
                 {{#if dados.status}}
-                <h1 style="color: #d6d9d9">Cotação indisponível</h1>
+                <h1 class="cotacao">Cotação indisponível</h1>
                 {{else}}
                 {{#each dados}}
-                <h1 style="color: #d6d9d9;">Cotação</h1>
+                <h1 class="cotacao">Cotação:</h1>
             </div>
-                <p style="white-space: pre-line; color: #d6d9d9">Moeda: {{name}}
+            <div class="col">
+                <p style="white-space: pre-line; color: #d6d9d9; font-size: 1rem">Relação de moedas: {{name}}
                     Cotação: {{bid}}
                     Variação: {{varBid}}
-                    Dia: {{create_date}}</p>
+                    Data de fechamento: {{create_date}}</p>
                 <br>
                 <input type="text" id="mult" hidden value="{{bid}}">
                 {{/each}}
                 {{/if}}
-            
+            </div>
         </div>
 
         <div class="">
@@ -96,7 +96,6 @@
 <script>
     var mult = document.getElementById("mult")
     let inputBox = document.querySelector("#inputBox")
-    document.getElementById("inputBox").value = 1
     inputBox.addEventListener("input", function () {
         document.getElementById("inputBox2").value = this.value * mult.value
     })
